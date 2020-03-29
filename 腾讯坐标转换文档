@@ -1,0 +1,84 @@
+# WebService API 坐标转换
+
+[官方文档](https://lbs.qq.com/webservice_v1/guide-convert.html)
+
+[案例](https://apis.map.qq.com/ws/coord/v1/translate?locations=31.25090,104.37876&type=3&key=SESBZ-L4YLD-LTN4F-H5TR4-NRSYJ-FSBP6)
+
+##概述
+>实现从其它地图供应商坐标系或标准GPS坐标系，批量转换到腾讯地图坐标系。
+
+##请求URL
+>该请求为GET请求
+`https://apis.map.qq.com/ws/coord/v1/translate`
+
+##请求参数
+### locations
+说明:
+- 预转换的坐标，支持批量转换
+- 格式：纬度前，经度后，纬度和经度之间用","分隔，每组坐标之间使用";"分隔；
+- 批量支持坐标个数以HTTP GET方法请求上限为准
+
+示例:`locations=39.12,116.83;30.21,115.43`
+
+### type
+说明:
+- 输入的locations的坐标类型,可选值为[1,6]之间的整数，每个数字代表的类型说明：
+1. GPS坐标
+2. sogou经纬度
+3. baidu经纬度
+4. mapbar经纬度
+5. [默认]腾讯、google、高德坐标
+6. sogou墨卡托
+
+示例:`type=3`
+
+### key	
+说明:开发密钥（Key）	
+
+示例:`key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77`
+
+## 响应结果
+
+### status	
+- 类型:number	
+
+状态码:
+- 0为正常,
+- 310请求参数信息有误，
+- 311key格式错误,
+- 306请求有护持信息请检查字符串,
+- 110请求来源未被授权
+
+### message
+- 类型：string
+- 描述：对status的描述
+
+### locations
+- 	坐标转换结果，转换后的坐标顺序与输入顺序一致
+- lat 纬度
+- lng 经度
+
+## 调用示例
+```
+// GET请求，注意参数值要进行URL编码
+https://apis.map.qq.com/ws/coord/v1/translate?
+locations=39.12,116.83;30.21,115.43&
+type=3&
+key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77
+
+//响应示例：
+{
+    "status": 0,
+    "message": "转换成功",
+    "locations": [
+        {
+            "lng": 116.8234023,
+            "lat": 39.11428542
+        },
+        {
+            "lng": 115.42357111,
+            "lat": 30.20378632
+        }
+    ]
+}
+```
